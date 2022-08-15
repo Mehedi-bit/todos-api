@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+/* eslint-disable object-shorthand */
 const mongoose = require('mongoose');
 
 const todoSchema = mongoose.Schema({
@@ -15,5 +17,30 @@ const todoSchema = mongoose.Schema({
         default: Date.now,
     },
 });
+
+// instance methods
+todoSchema.methods = {
+    findActive: function () {
+        return mongoose.model('Todo').find({ status: 'active' });
+    },
+
+    findActiveCallback: function (cb) {
+        return mongoose.model('Todo').find({ status: 'active' }, cb);
+    },
+};
+
+// static methods
+todoSchema.statics = {
+    findByJS: function () {
+        return this.find({ title: /js/i });
+    },
+};
+
+// query helpers
+todoSchema.query = {
+    byLanguage: function (language) {
+        return this.find({ title: new RegExp(language, 'i') });
+    },
+};
 
 module.exports = todoSchema;
