@@ -82,9 +82,7 @@ router.get('/:id', async (req, res) => {
 
 // POST A TODO
 router.post('/', (req, res) => {
-    const todoObject = req.body;
-    // modeled todo
-    const newTodo = new Todo(todoObject);
+    const newTodo = new Todo(req.body);
     newTodo.save((err) => {
         if (err) {
             res.status(500).json({
