@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const checkLogin = require('../middlewares/checkLogin');
 
 const router = express.Router();
 const todoSchema = require('../schemas/todoSchema');
@@ -7,7 +8,7 @@ const todoSchema = require('../schemas/todoSchema');
 const Todo = mongoose.model('Todo', todoSchema);
 
 // GET ALL THE TODOS
-router.get('/', (req, res) => {
+router.get('/', checkLogin, (req, res) => {
     Todo.find({ status: 'active' })
         .select({
             _id: 0,
@@ -30,7 +31,7 @@ router.get('/', (req, res) => {
 });
 
 // GET ACTIVE THE TODOS
-router.get('/active', async (req, res) => {
+router.get('/active', checkLogin, async (req, res) => {
     const todo = new Todo();
     const data = await todo.findActive();
 
@@ -130,7 +131,7 @@ router.put('/:id', (req, res) => {
                     message: 'Todo was updated successfully',
                 });
             }
-        }
+        },
     );
 
     console.log(result);
